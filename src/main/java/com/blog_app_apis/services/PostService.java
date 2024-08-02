@@ -3,6 +3,7 @@ package com.blog_app_apis.services;
 import java.util.List;
 
 import com.blog_app_apis.payloads.PostDto;
+import com.blog_app_apis.payloads.PostResponse;
 
 public interface PostService {
     // Create
@@ -14,7 +15,7 @@ public interface PostService {
     // find by id
     public PostDto getPostById(int postId);
     // get all
-    public List<PostDto> getAllPost(int pageNumber,int pageSize);
+    public PostResponse getAllPost(int pageNumber,int pageSize);
     // get all by category
     public List<PostDto> getPostByCategory(int categoryId);
     // get all by user
