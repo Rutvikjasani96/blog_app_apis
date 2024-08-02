@@ -53,26 +53,33 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostDto updatePost(PostDto postDto, int postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePost'");
+        Post post = postRepository.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post", "Post Id", postId));
+        post.setPostTitle(postDto.getPostTitle());
+        post.setPostContent(postDto.getPostContent());
+        post.setPostImgName(postDto.getPostImgName());
+        Post updatedPost = postRepository.save(post);
+        PostDto updatedPostDto = modelMapper.map(updatedPost, PostDto.class);
+        return updatedPostDto;
     }
 
     @Override
     public void deletePost(int postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deletePost'");
+        Post post = postRepository.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post", "Post Id", postId));
+        postRepository.delete(post);
     }
 
     @Override
-    public List<PostDto> getPostById(int postId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPostById'");
+    public PostDto getPostById(int postId) {
+        Post post = postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post", "Post id", postId));
+        PostDto postDto = modelMapper.map(post, PostDto.class);
+        return postDto;
     }
 
     @Override
     public List<PostDto> getAllPost() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllPost'");
+        List<Post> posts = postRepository.findAll();
+        List<PostDto> postDtos = posts.stream().map((post)->modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return postDtos;
     }
 
     @Override
