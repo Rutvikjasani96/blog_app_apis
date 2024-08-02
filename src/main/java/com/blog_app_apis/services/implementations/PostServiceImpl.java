@@ -2,7 +2,6 @@ package com.blog_app_apis.services.implementations;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.blog_app_apis.entities.Category;
@@ -80,9 +80,11 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public PostResponse getAllPost(int pageNumber,int pageSize) {
+    public PostResponse getAllPost(int pageNumber,int pageSize,String sortBy,String sortDir) {
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending() ;
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize,sort);
         Page<Post> pagePosts = postRepository.findAll(pageable);
         List<Post> posts = pagePosts.getContent();
         List<PostDto> postDtos = posts.stream().map((post)->modelMapper.map(post, PostDto.class)).collect(Collectors.toList());

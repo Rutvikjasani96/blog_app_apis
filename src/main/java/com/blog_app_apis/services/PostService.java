@@ -15,7 +15,7 @@ public interface PostService {
     // find by id
     public PostDto getPostById(int postId);
     // get all
-    public PostResponse getAllPost(int pageNumber,int pageSize);
+    public PostResponse getAllPost(int pageNumber,int pageSize,String sortBy,String sortDir);
     // get all by category
     public List<PostDto> getPostByCategory(int categoryId);
     // get all by user
