@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog_app_apis.config.AppConstants;
 import com.blog_app_apis.payloads.ApiResponse;
 import com.blog_app_apis.payloads.PostDto;
 import com.blog_app_apis.payloads.PostResponse;
@@ -54,10 +55,10 @@ public class PostController {
 
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPost(
-        @RequestParam(value = "pageNumber", defaultValue = "0",required = false) int pageNumber, 
-        @RequestParam(value="pageSize", defaultValue = "10", required = false) int pageSize,
-        @RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
-        @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+        @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER,required = false) int pageNumber, 
+        @RequestParam(value="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
+        @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+        @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
         ){
         PostResponse postResponse = postService.getAllPost(pageNumber,pageSize,sortBy,sortDir);
         return new ResponseEntity<PostResponse>(postResponse,HttpStatus.OK);
@@ -73,5 +74,11 @@ public class PostController {
     public ResponseEntity<List<PostDto>> getPostByUser(@PathVariable("userId") int userId){
         List<PostDto> posts = postService.getPostByUser(userId);
         return new ResponseEntity<>(posts,HttpStatus.OK);
+    }
+
+    @GetMapping("/posts/search/{searchKeyword}")
+    public ResponseEntity<List<PostDto>> searchPostByTitle(@PathVariable("searchKeyword") String searchKeyword){
+        List<PostDto> searchedPosts = postService.searchPosts(searchKeyword);
+        return new ResponseEntity<List<PostDto>>(searchedPosts,HttpStatus.OK);
     }
 }

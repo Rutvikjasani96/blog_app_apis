@@ -116,8 +116,9 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostDto> searchPosts(String searchKeyword) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchPosts'");
+        List<Post> posts = postRepository.findByPostTitleContaining(searchKeyword);
+        List<PostDto> postDtos = posts.stream().map((post)->modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return postDtos;
     }
     
 }
